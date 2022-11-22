@@ -18,10 +18,10 @@ def parse_docstrings(source):
     no docstring, it gives the first line of the class, funcion or method
     block, and docstring is None.
     """
-    return process_node(ast.parse(source))
+    return process_node(ast.parse(source), source=source)
 
 
-def process_node(node):
+def process_node(node, source):
     """Recursive function to obtain ast nodes"""
     node_type = NODE_TYPES.get(type(node))
     docstring_text = ast.get_docstring(node)
@@ -109,7 +109,7 @@ def process_node(node):
 
     # Recursion with supported node types
     children = [
-        process_node(n) for n in node.body if isinstance(n, tuple(NODE_TYPES))
+        process_node(n, source) for n in node.body if isinstance(n, tuple(NODE_TYPES))
     ]
 
     return {
@@ -122,6 +122,7 @@ def process_node(node):
         "params": params,
         "description": description,
         "arguments": arguments,
+        "source_segment": source_segment,
     }
 
 
