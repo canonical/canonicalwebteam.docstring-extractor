@@ -109,7 +109,9 @@ def process_node(node, source):
 
     # Recursion with supported node types
     children = [
-        process_node(n, source) for n in node.body if isinstance(n, tuple(NODE_TYPES))
+        process_node(n, source)
+        for n in node.body
+        if isinstance(n, tuple(NODE_TYPES))
     ]
 
     return {
@@ -122,7 +124,7 @@ def process_node(node, source):
         "params": params,
         "description": description,
         "arguments": arguments,
-        "source_segment": source_segment,
+        "source_segment": source,
     }
 
 
