@@ -26,6 +26,11 @@ def process_node(node, source):
     node_type = NODE_TYPES.get(type(node))
     docstring_text = ast.get_docstring(node)
     lineno = getattr(node, "lineno", 0)
+    node_name = getattr(node, "name", None)
+
+    is_private = node_name and (
+        node_name[0] == "_" and not node_name[-1] == "_"
+    )
 
     if docstring_text:
         try:
@@ -116,7 +121,7 @@ def process_node(node, source):
 
     return {
         "type": node_type,
-        "name": getattr(node, "name", None),
+        "name": node_name,
         "line": lineno,
         "docstring": docstring,
         "docstring_text": docstring_text if docstring_text else "",
@@ -125,6 +130,7 @@ def process_node(node, source):
         "description": description,
         "arguments": arguments,
         "source_segment": source,
+        "is_private": is_private,
     }
 
 
